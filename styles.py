@@ -34,3 +34,16 @@ toolbar_styles = """
         font-size: 18px;
         }
         """
+
+URL_BAR_STYLE = """
+    QLineEdit {
+        background-color: #2d2d2d;
+        color: #fff;
+        border: 1px solid #555;
+        padding: 4px;
+        font-size: 14px;
+    }
+    QLineEdit:focus {
+        border: 1px solid #0078d4;
+    }
+"""
