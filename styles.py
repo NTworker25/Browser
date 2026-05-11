@@ -1,39 +1,33 @@
 toolbar_styles = """
-        QToolBar {
-        background-color: #fff;
-        padding: 8px;
-        font-size: 14px;
-        color: #333;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        text-align: center;
-        }
-        
-        QToolButton {
+    QPushButton {
         background-color: #DFF8EB;
         color: #222;
-        padding: 3px 7px;
+        padding: 5px;
         border: 1px solid #74776B;
-        border-radius: 4px;
-        min-width: 40px;
-        text-align: center; 
+        border-radius: 8px;
+        width: 17px;
+        height: 17px;
         font-size: 20px;
-        }
-        
-        QToolButton:hover {
+        font-family: 'Segoe UI Emoji', 'Noto Color Emoji', 'Arial';
+    }
+
+    QPushButton:hover {
         background-color: #5C574F;
+        color: white;
         border-color: #888;
-        }
-        
-        QToolButton:pressed {
+    }
+
+    QPushButton:pressed {
         background-color: #444;
-        }
-        
-        QLineEdit {
+        color: white;
+    }
+
+    QLineEdit {
         padding: 8px 16px;
         font-size: 18px;
-        }
-        """
+        border-radius: 8px
+    }
+"""
 
 URL_BAR_STYLE = """
     QLineEdit {

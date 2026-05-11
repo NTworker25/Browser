@@ -19,9 +19,8 @@ class Browser(QMainWindow):
         self.setWindowTitle("RobustBrowser")
 
         # tab_container = QWidget()
+        # tab_container.setFixedHeight(50)
         # tabs_layout = QHBoxLayout(tab_container)
-        # tabs_layout.setContentsMargins(0, 0, 0, 0)
-        # tabs_layout.setSpacing(0)
 
         # new_tab_button = QPushButton("+")
         # new_tab_button.setFixedSize(30, 30)
@@ -34,29 +33,28 @@ class Browser(QMainWindow):
         # tabs_layout.addWidget(self.tabs, 1)
         # tabs_layout.addWidget(new_tab_button)
 
-        # Создание окна
-        # central_widget = QWidget()
-        # central_layout = QVBoxLayout(central_widget)
-        # central_layout.setContentsMargins(0, 0, 0, 0)
-        # central_layout.setSpacing(0)
-        # central_layout.addWidget(nav_bar, 0)  # Панель навигации с stretch=0 (не растягивается)
-        # central_layout.addWidget(self.browser, 1)  # Браузер с stretch=1 (занимает всё оставшееся пространство)
-        # central_layout.addWidget(self.tab, 1)
-
-        # self.setCentralWidget(central_widget)
-
         # Виждет вкладок
-        # tab_widgets = QTabWidget()
         self.add_new_tab()
 
     def add_new_tab(self):
+        """Добавление новой вкладки"""
+
         tab = TabWidget()
         index = self.tabs.addTab(tab, "Новая вкладка")
         self.tabs.setCurrentIndex(index)
-        # if qurl is None:
-        #     qurl = QUrl("https://www.google.com")
-        # self.web_engine = QWebEngineView()
-        # self.web_engine.setUrl(qurl)
+        tab.browser.titleChanged.connect(lambda title, idx=index: self.title_cut(idx, title, tab))
+
+    def title_cut(self, idx: int, title: str, tab: TabWidget) -> None:
+        """Обрезка названия вкладки"""
+
+        if len(title) > 25:
+            short_title = f"{title[:22]}..."
+            self.tabs.setTabText(idx, short_title)
+            self.tabs.setTabToolTip(idx, title)
+            tab.tab_title = short_title
+        else:
+            self.tabs.setTabText(idx, title)
+            tab.tab_title = title
 
     def close_tab(self, tab_index):
         if self.tabs.count() == 1:

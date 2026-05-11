@@ -1,7 +1,9 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QMenuBar
 from PyQt5.QtCore import QUrl, QEvent
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from styles import URL_BAR_STYLE
+
+from styles import URL_BAR_STYLE, toolbar_styles
+import json
 
 
 class TabWidget(QWidget):
@@ -11,6 +13,8 @@ class TabWidget(QWidget):
         self.browser = QWebEngineView()
         self.browser.setUrl(QUrl("https://www.google.com"))
         self.full_url = ""
+        self.short_url = ""
+        self.tab_title = ""
         self.browser.urlChanged.connect(self.update_url_bar)
 
         # Создание поисковой строки и получение событий
@@ -22,23 +26,30 @@ class TabWidget(QWidget):
         # Лейбл для кнопок навигации и поисковой строки
         nav_bar = QWidget()
         nav_bar.setFixedHeight(50)
+        nav_bar.setStyleSheet(toolbar_styles)
         nav_layout = QHBoxLayout(nav_bar)
 
         # Кнопки навигации
-        back_btn = QPushButton("←")
-        reset_btn = QPushButton("↻")
-        forward_btn = QPushButton("→")
+        back_btn = QPushButton("⬅️")
+        reset_btn = QPushButton("🔄️")
+        forward_btn = QPushButton("➡️")
+        bookmark_btn = QPushButton("⭐")
+
+        # Кнопка добавления закладки
+        bookmarks = QMenuBar(nav_bar)
 
         # Привязываем функции к кнопкам
         back_btn.clicked.connect(self.browser.back)
         reset_btn.clicked.connect(self.browser.reload)
         forward_btn.clicked.connect(self.browser.forward)
+        bookmark_btn.clicked.connect(self.add_bookmark)
 
         # Добавляем кнопки в виджет
         nav_layout.addWidget(back_btn)
         nav_layout.addWidget(reset_btn)
         nav_layout.addWidget(forward_btn)
         nav_layout.addWidget(self.url_bar)
+        nav_layout.addWidget(bookmark_btn)
 
         # Создание главного контейнера
         layout = QVBoxLayout()
@@ -89,9 +100,9 @@ class TabWidget(QWidget):
         """Записывает ссылку в интерфейс, отображение ссылки"""
 
         self.full_url = new_url.toString()
+        self.short_url = self.cut_url(self.full_url)
         if not self.url_bar.hasFocus():
-            short_url = self.cut_url(self.full_url)
-            self.url_bar.setText(short_url)
+            self.url_bar.setText(self.short_url)
         else:
             self.url_bar.setText(self.full_url)
 
@@ -103,7 +114,46 @@ class TabWidget(QWidget):
                 if self.full_url:
                     self.url_bar.setText(self.full_url)
             elif event.type() == QEvent.FocusOut:
-                if self.full_url:
-                    short_url = self.cut_url(self.full_url)
-                    self.url_bar.setText(short_url)
+                if self.short_url:
+                    self.url_bar.setText(self.short_url)
         return super().eventFilter(obj, event)
+
+    def add_bookmark(self):
+        """Добавление иформации о закладке в JSON"""
+
+        data = {}
+        with open("bookmarks.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        info = {
+            "title": self.tab_title,
+            "url": self.full_url
+        }
+
+        is_contain = False
+        delete_index = 0
+
+        for i, bookmark in enumerate(data["bookmarks"]):
+            if bookmark["url"] == self.full_url:
+                is_contain = True
+                delete_index = i
+
+        if is_contain:
+            data["bookmarks"].pop(delete_index)
+        else:
+            data["bookmarks"].append(info)
+
+        with open("bookmarks.json", "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+
+
+
+
+
+
+
+
+
+
+
