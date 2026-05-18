@@ -41,3 +41,35 @@ URL_BAR_STYLE = """
         border: 1px solid #0078d4;
     }
 """
+
+TAB_WIDGET_STYLE = """
+    QTabBar {
+        padding: 6px 10px;
+        min-width: 80px;
+        max-width: 300px;
+        width: 100%;
+    }
+    QTabWidget {
+        width: 600px;
+        height: 100px;
+    }
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

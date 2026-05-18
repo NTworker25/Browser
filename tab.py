@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QMenuBar
 from PyQt5.QtCore import QUrl, QEvent
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+import os
 
 from styles import URL_BAR_STYLE, toolbar_styles
 import json
@@ -11,7 +12,8 @@ class TabWidget(QWidget):
         super().__init__()
         # self.tabBar().setExpanding(True)
         self.browser = QWebEngineView()
-        self.browser.setUrl(QUrl("https://www.google.com"))
+        self.local_file = os.path.join(os.path.dirname(__file__), "home_page", "index.html")
+        self.browser.setUrl(QUrl.fromLocalFile(self.local_file))
         self.full_url = ""
         self.short_url = ""
         self.tab_title = ""

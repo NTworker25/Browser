@@ -3,11 +3,12 @@ import sys
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QMainWindow, QApplication, QToolBar, QPushButton, QLineEdit, QToolButton, QWidget, \
     QVBoxLayout, QTabWidget
-from PyQt5.QtCore import QUrl, QEvent
+from PyQt5.QtCore import QUrl, QEvent, Qt
 from PyQt5.QtWidgets import QHBoxLayout
 
 from styles import toolbar_styles, URL_BAR_STYLE
 from tab import TabWidget
+from styles import TAB_WIDGET_STYLE
 
 
 class Browser(QMainWindow):
@@ -22,13 +23,15 @@ class Browser(QMainWindow):
         # tab_container.setFixedHeight(50)
         # tabs_layout = QHBoxLayout(tab_container)
 
-        # new_tab_button = QPushButton("+")
-        # new_tab_button.setFixedSize(30, 30)
+        new_tab_button = QPushButton("+")
+        new_tab_button.setFixedSize(30, 30)
 
         self.tabs = QTabWidget()
         self.tabs.tabCloseRequested.connect(self.close_tab)
         self.tabs.setTabsClosable(True)
+        self.tabs.setStyleSheet(TAB_WIDGET_STYLE)
         self.setCentralWidget(self.tabs)
+        self.tabs.setCornerWidget(new_tab_button, Qt.TopRightCorner)
 
         # tabs_layout.addWidget(self.tabs, 1)
         # tabs_layout.addWidget(new_tab_button)
